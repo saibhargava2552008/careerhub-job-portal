@@ -1,0 +1,9 @@
+{
+  "name": "careerhub-job-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A job portal built with HTML, CSS, vanilla JavaScript, Node.js, Express, and MongoDB.",
+  "scripts": {
+    "start": "npm --prefix backend start"
+  }
+}

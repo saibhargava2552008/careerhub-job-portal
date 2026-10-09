@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Recruiter Dashboard - CareerHub</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>CareerHub</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../index.html#jobs">Jobs</a>
+            <a href="my-applications.html">My Applications</a>
+            <a href="recruiter-dashboard.html">Recruiter Dashboard</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section>
+
+            <h2>Recruiter Dashboard</h2>
+
+            <form id="jobForm">
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Job Title"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="company"
+                    placeholder="Company Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Location"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="salary"
+                    placeholder="Salary e.g. ₹6 - ₹10 LPA"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="skills"
+                    placeholder="Skills e.g. HTML, CSS, JavaScript"
+                    required
+                >
+
+                <select id="jobType" required>
+
+                    <option value="">Select Job Type</option>
+
+                    <option value="Full Time">
+                        Full Time
+                    </option>
+
+                    <option value="Part Time">
+                        Part Time
+                    </option>
+
+                    <option value="Internship">
+                        Internship
+                    </option>
+
+                    <option value="Contract">
+                        Contract
+                    </option>
+
+                </select>
+
+                <textarea
+                    id="description"
+                    placeholder="Job Description"
+                    required
+                    rows="6"
+                ></textarea>
+
+                <br>
+
+                <button type="submit">
+                    Post Job
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="jobs-section">
+
+            <h2>My Posted Jobs</h2>
+
+            <div
+                class="job-container"
+                id="jobContainer"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>© 2026 CareerHub. All rights reserved.</p>
+
+    </footer>
+
+
+    <script>
+
+        const token =
+            localStorage.getItem("token");
+
+        const user =
+            JSON.parse(localStorage.getItem("user") || "null");
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (character) {
+                return {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                }[character];
+            });
+        }
+
+        function safeHttpUrl(value) {
+            try {
+                const url = new URL(String(value || ""));
+                return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+            } catch (error) {
+                return "";
+            }
+        }
+
+        const jobForm =
+            document.getElementById("jobForm");
+
+        const jobContainer =
+            document.getElementById("jobContainer");
+
+
+        if (!token || !user || user.role !== "recruiter") {
+            alert("Please login with a recruiter account.");
+            window.location.href = "login.html";
+        }
+
+
+        // Post Job
+
+        jobForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const skillsText =
+                    document.getElementById("skills").value;
+
+
+                const skills =
+                    skillsText
+                        .split(",")
+                        .map(function (skill) {
+                            return skill.trim();
+                        })
+                        .filter(function (skill) {
+                            return skill !== "";
+                        });
+
+
+                const jobData = {
+
+                    title:
+                        document.getElementById("title").value.trim(),
+
+                    company:
+                        document.getElementById("company").value.trim(),
+
+                    location:
+                        document.getElementById("location").value.trim(),
+
+                    salary:
+                        document.getElementById("salary").value.trim(),
+
+                    skills: skills,
+
+                    jobType:
+                        document.getElementById("jobType").value,
+
+                    description:
+                        document.getElementById("description").value.trim()
+
+                };
+
+
+                try {
+
+                    const response = await fetch(
+                        "http://localhost:5000/api/jobs",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+
+                            body: JSON.stringify(jobData)
+                        }
+                    );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        alert(
+                            data.message ||
+                            "Failed to post job."
+                        );
+
+                        return;
+
+                    }
+
+
+                    alert("Job posted successfully!");
+
+                    jobForm.reset();
+
+                    loadMyJobs();
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Unable to connect to the server."
+                    );
+
+                }
+
+            }
+        );
+
+
+        // Load My Jobs
+
+        async function loadMyJobs() {
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:5000/api/jobs"
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    return;
+
+                }
+
+
+                const myJobs =
+                    data.jobs.filter(function (job) {
+
+                        if (!job.recruiter) return false;
+                        const recruiterId = job.recruiter._id || job.recruiter;
+                        const userId = user._id || user.id;
+                        return String(recruiterId) === String(userId);
+
+                    });
+
+
+                jobContainer.innerHTML = "";
+
+
+                if (myJobs.length === 0) {
+
+                    jobContainer.innerHTML =
+                        "<p>You have not posted any jobs yet.</p>";
+
+                    return;
+
+                }
+
+
+                myJobs.forEach(function (job) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "job-card";
+
+
+    card.innerHTML = `
+
+        <h3>${escapeHTML(job.title)}</h3>
+
+        <p>
+            <strong>Company:</strong>
+            ${escapeHTML(job.company)}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            ${escapeHTML(job.location)}
+        </p>
+
+        <p>
+            <strong>Type:</strong>
+            ${escapeHTML(job.jobType)}
+        </p>
+
+        <p>
+            <strong>Salary:</strong>
+            ${escapeHTML(job.salary)}
+        </p>
+
+        <button class="applicants-button">
+            View Applicants
+        </button>
+
+        <div class="applicants-container"></div>
+
+    `;
+
+
+    const applicantsButton =
+        card.querySelector(".applicants-button");
+
+    const applicantsContainer =
+        card.querySelector(".applicants-container");
+
+
+    applicantsButton.addEventListener(
+        "click",
+        async function () {
+
+            applicantsContainer.innerHTML =
+                "<p>Loading applicants...</p>";
+
+
+            try {
+
+                const response = await fetch(
+                    `http://localhost:5000/api/applications/job/${job._id}`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    applicantsContainer.textContent = data.message || "Failed to load applicants.";
+
+                    return;
+
+                }
+
+
+                if (data.applications.length === 0) {
+
+                    applicantsContainer.innerHTML =
+                        "<p>No applicants yet.</p>";
+
+                    return;
+
+                }
+
+
+                applicantsContainer.innerHTML = "";
+
+
+                data.applications.forEach(
+                    function (application) {
+
+                        const applicant =
+                            document.createElement("div");
+
+
+                        applicant.innerHTML = `
+
+                            <hr>
+
+                            <p>
+                                <strong>
+                                    ${escapeHTML(application.applicant.name)}
+                                </strong>
+                            </p>
+
+                            <p>
+                                ${escapeHTML(application.applicant.email)}
+                            </p>
+
+                            <p>
+                                Resume:
+                                <a
+                                    href="${escapeHTML(safeHttpUrl(application.resume))}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    View Resume
+                                </a>
+                            </p>
+
+                            <p>
+                                Status:
+                                ${escapeHTML(application.status)}
+                            </p>
+
+                            <select class="status-select">
+
+                                <option value="Applied">
+                                    Applied
+                                </option>
+
+                                <option value="Shortlisted">
+                                    Shortlisted
+                                </option>
+
+                                <option value="Rejected">
+                                    Rejected
+                                </option>
+
+                                <option value="Selected">
+                                    Selected
+                                </option>
+
+                            </select>
+
+                            <button class="update-status">
+                                Update Status
+                            </button>
+
+                        `;
+
+
+                        const select =
+                            applicant.querySelector(
+                                ".status-select"
+                            );
+
+                        select.value =
+                            application.status;
+
+
+                        const updateButton =
+                            applicant.querySelector(
+                                ".update-status"
+                            );
+
+
+                        updateButton.addEventListener(
+                            "click",
+                            async function () {
+
+                                const newStatus =
+                                    select.value;
+
+
+                                const updateResponse =
+                                    await fetch(
+                                        `http://localhost:5000/api/applications/${application._id}`,
+                                        {
+                                            method: "PUT",
+
+                                            headers: {
+                                                "Content-Type":
+                                                    "application/json",
+
+                                                "Authorization":
+                                                    `Bearer ${token}`
+                                            },
+
+                                            body: JSON.stringify({
+                                                status: newStatus
+                                            })
+                                        }
+                                    );
+
+
+                                const updateData =
+                                    await updateResponse.json();
+
+
+                                if (!updateResponse.ok) {
+
+                                    alert(
+                                        updateData.message ||
+                                        "Failed to update status."
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                alert(
+                                    "Application status updated!"
+                                );
+
+                            }
+                        );
+
+
+                        applicantsContainer.appendChild(
+                            applicant
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                applicantsContainer.innerHTML =
+                    "<p>Unable to load applicants.</p>";
+
+            }
+
+        }
+    );
+
+
+    jobContainer.appendChild(card);
+
+});
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+
+        loadMyJobs();
+
+    </script>
+    <script src="../js/cursor.js"></script>
+
+
+    <script src="../js/nav.js"></script>
+</body>
+
+</html>

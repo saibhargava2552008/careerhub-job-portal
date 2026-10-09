@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - CareerHub</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>CareerHub</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../index.html#jobs">Jobs</a>
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section>
+
+            <h2>Create Account</h2>
+
+            <form id="registerForm">
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create password"
+                    required
+                >
+
+                <select id="role" required>
+                    <option value="">Select Role</option>
+                    <option value="jobseeker">Job Seeker</option>
+                    <option value="recruiter">Recruiter</option>
+                </select>
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>© 2026 CareerHub. All rights reserved.</p>
+
+    </footer>
+
+
+    <script>
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+
+        registerForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document.getElementById("name").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const role =
+                document.getElementById("role").value;
+
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:5000/api/auth/register",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            password: password,
+                            role: role
+                        })
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(data.message || "Registration failed.");
+
+                    return;
+
+                }
+
+
+                alert("Account created successfully!");
+
+
+                window.location.href = "login.html";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Unable to connect to the server.");
+
+            }
+
+        });
+
+
+    </script>
+    <script src="../js/cursor.js"></script>
+
+
+    <script src="../js/nav.js"></script>
+</body>
+
+</html>

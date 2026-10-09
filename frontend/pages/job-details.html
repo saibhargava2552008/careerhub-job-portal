@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Job Details - CareerHub</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>CareerHub</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="#">Jobs</a>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="job-details">
+
+    <h2 id="jobTitle"></h2>
+
+    <p><strong>Company:</strong> <span id="jobCompany"></span></p>
+
+    <p><strong>Location:</strong> <span id="jobLocation"></span></p>
+
+    <p><strong>Job Type:</strong> <span id="jobType"></span></p>
+
+    <p><strong>Salary:</strong> <span id="jobSalary"></span></p>
+
+    <h3>Job Description</h3>
+    <p id="jobDescription"></p>
+
+    <h3>Required Skills</h3>
+    <p id="jobSkills"></p>
+
+    <button id="applyButton">Apply Now</button>
+
+</section>
+    </main>
+
+    <footer>
+        <p>© 2026 CareerHub. All rights reserved.</p>
+    </footer>
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+
+    const jobId = params.get("job");
+
+
+    async function loadJob() {
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:5000/api/jobs/${jobId}`
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                alert(data.message || "Job not found.");
+
+                return;
+
+            }
+
+
+            const selectedJob = data.job;
+
+
+            document.getElementById("jobTitle").textContent =
+                selectedJob.title;
+
+            document.getElementById("jobCompany").textContent =
+                selectedJob.company;
+
+            document.getElementById("jobLocation").textContent =
+                selectedJob.location;
+
+            document.getElementById("jobType").textContent =
+                selectedJob.jobType;
+
+            document.getElementById("jobSalary").textContent =
+                selectedJob.salary;
+
+            document.getElementById("jobDescription").textContent =
+                selectedJob.description;
+
+            document.getElementById("jobSkills").textContent =
+                selectedJob.skills.join(", ");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to connect to the server.");
+
+        }
+
+    }
+
+
+    loadJob();
+
+
+    const applyButton =
+        document.getElementById("applyButton");
+
+
+    applyButton.addEventListener("click", function () {
+
+        window.location.href = `apply.html?job=${jobId}`;
+
+    });
+
+</script>
+<script src="../js/cursor.js"></script>
+
+
+    <script src="../js/nav.js"></script>
+</body>
+</html>

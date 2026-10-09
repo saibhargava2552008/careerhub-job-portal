@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerHub - Job Portal</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>CareerHub</h1>
+
+        <nav>
+        <a href="index.html">Home</a>
+        <a href="#jobs">Jobs</a>
+        <a href="pages/login.html">Login</a>
+        <a href="pages/register.html">Register</a>
+    </nav>
+    </header>
+
+
+    <main>
+
+        <section>
+
+            <h2>Find Your Dream Job</h2>
+
+            <p>
+                Discover opportunities and build your career with CareerHub.
+            </p>
+
+            <input
+                type="text"
+                id="jobSearch"
+                placeholder="Search for jobs"
+            >
+
+            <input
+                type="text"
+                id="locationSearch"
+                placeholder="Enter location"
+            >
+
+            <button id="searchButton">
+                Search Jobs
+            </button>
+
+        </section>
+
+
+        <section class="jobs-section" id="jobs">
+
+            <h2>Latest Job Opportunities</h2>
+
+            <div
+                class="job-container"
+                id="jobContainer"
+            >
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 CareerHub. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    
+    <script src="js/main.js"></script>
+    <script src="js/cursor.js"></script>
+
+    <script src="js/nav.js"></script>
+</body>
+
+</html>

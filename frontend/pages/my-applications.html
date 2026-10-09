@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Applications - CareerHub</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>CareerHub</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../index.html#jobs">Jobs</a>
+            <a href="my-applications.html">My Applications</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="jobs-section">
+
+            <h2>My Applications</h2>
+
+            <div
+                class="job-container"
+                id="applicationContainer"
+            >
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>© 2026 CareerHub. All rights reserved.</p>
+
+    </footer>
+
+
+    <script>
+
+        const container =
+            document.getElementById("applicationContainer");
+
+        const token =
+            localStorage.getItem("token");
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (character) {
+                return {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                }[character];
+            });
+        }
+
+        async function loadApplications() {
+
+            if (!token) {
+
+                container.innerHTML =
+                    "<p>Please login to view your applications.</p>";
+
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:5000/api/applications/my",
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    container.textContent = data.message || "Failed to load applications.";
+
+                    return;
+                }
+
+
+                if (data.applications.length === 0) {
+
+                    container.innerHTML =
+                        "<p>You have not applied for any jobs yet.</p>";
+
+                    return;
+                }
+
+
+                container.innerHTML = "";
+
+
+                data.applications.forEach(function (application) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "job-card";
+
+
+                    const job = application.job;
+
+
+                    card.innerHTML = `
+
+                        <h3>${escapeHTML(job.title)}</h3>
+
+                        <p><strong>Company:</strong> ${escapeHTML(job.company)}</p>
+
+                        <p><strong>Location:</strong> ${escapeHTML(job.location)}</p>
+
+                        <p><strong>Job Type:</strong> ${escapeHTML(job.jobType)}</p>
+
+                        <p>
+                            <strong>Application Status:</strong>
+                            ${escapeHTML(application.status)}
+                        </p>
+
+                        <p>
+                            <strong>Applied On:</strong>
+                            ${new Date(application.createdAt).toLocaleDateString()}
+                        </p>
+
+                    `;
+
+
+                    container.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                container.innerHTML =
+                    "<p>Unable to connect to the server.</p>";
+
+            }
+
+        }
+
+
+        loadApplications();
+
+    </script>
+    <script src="../js/cursor.js"></script>
+
+
+    <script src="../js/nav.js"></script>
+</body>
+
+</html>

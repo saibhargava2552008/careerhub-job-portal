@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply - CareerHub</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>CareerHub</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="#">Jobs</a>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section>
+
+            <h2>Apply for Job</h2>
+
+            <form id="applicationForm">
+
+                <input
+                    type="text"
+                    id="applicantName"
+                    placeholder="Enter your name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="applicantEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="applicantPhone"
+                    placeholder="Enter your phone number"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="resumeLink"
+                    placeholder="Enter your resume link"
+                    required
+                >
+
+                <button type="submit">
+                    Submit Application
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <p>© 2026 CareerHub. All rights reserved.</p>
+
+    </footer>
+
+    <script>
+
+        const params = new URLSearchParams(window.location.search);
+
+        const job = params.get("job");
+
+        const applicationForm =
+            document.getElementById("applicationForm");
+
+
+        applicationForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+
+                alert("Please login before applying for a job.");
+
+                return;
+
+            }
+
+
+            const resume = document.getElementById("resumeLink").value.trim();
+
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:5000/api/applications",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            job: job,
+                            resume: resume
+                        })
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(data.message || "Application failed.");
+
+                    return;
+
+                }
+
+
+                alert("Application submitted successfully!");
+
+                applicationForm.reset();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Unable to connect to the server.");
+
+            }
+
+        });
+
+    </script>
+    <script src="../js/cursor.js"></script>
+
+
+    <script src="../js/nav.js"></script>
+</body>
+
+</html>

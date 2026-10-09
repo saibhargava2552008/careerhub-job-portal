@@ -1,0 +1,842 @@
+/* ========================================
+   CAREERHUB - MODERN UI/UX
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #111827;
+
+    /* Custom cursor */
+    cursor: none;
+}
+
+
+/* ========================================
+   SELECTION
+======================================== */
+
+::selection {
+    background: #2563eb;
+    color: white;
+}
+
+
+/* ========================================
+   HEADER / NAVBAR
+======================================== */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 60px;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #e5e7eb;
+
+    transition: all 0.3s ease;
+}
+
+header h1 {
+    color: #2563eb;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+
+    cursor: none;
+
+    transition: transform 0.3s ease;
+}
+
+header h1:hover {
+    transform: scale(1.04);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+nav a {
+    position: relative;
+
+    text-decoration: none;
+    color: #374151;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    padding: 6px 0;
+
+    transition: color 0.25s ease;
+
+    cursor: none;
+}
+
+nav a::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 2px;
+
+    background: #2563eb;
+
+    transition: width 0.25s ease;
+}
+
+nav a:hover {
+    color: #2563eb;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+
+/* ========================================
+   MAIN
+======================================== */
+
+main {
+    min-height: 80vh;
+}
+
+
+/* ========================================
+   HERO SECTION
+======================================== */
+
+main > section:first-child {
+    position: relative;
+
+    padding: 120px 20px 110px;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(37, 99, 235, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(59, 130, 246, 0.08),
+            transparent 30%
+        ),
+        #f8faff;
+}
+
+main > section:first-child::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.06);
+
+    top: -120px;
+    left: -100px;
+
+    pointer-events: none;
+}
+
+main > section:first-child h2 {
+    position: relative;
+
+    font-size: clamp(38px, 6vw, 64px);
+
+    line-height: 1.1;
+
+    color: #111827;
+
+    margin-bottom: 20px;
+
+    letter-spacing: -2px;
+}
+
+main > section:first-child p {
+    position: relative;
+
+    font-size: 18px;
+
+    color: #6b7280;
+
+    max-width: 650px;
+
+    margin: 0 auto 35px;
+
+    line-height: 1.7;
+}
+
+
+/* ========================================
+   INPUTS
+======================================== */
+
+main section input,
+select,
+textarea {
+    outline: none;
+
+    border: 1px solid #d1d5db;
+
+    background: white;
+
+    color: #111827;
+
+    border-radius: 10px;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.2s ease;
+
+    cursor: none;
+}
+
+main section input {
+    width: 280px;
+
+    padding: 14px 16px;
+
+    margin: 5px;
+
+    font-size: 15px;
+}
+
+main section input::placeholder,
+textarea::placeholder {
+    color: #9ca3af;
+}
+
+main section input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.10);
+
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+button {
+    position: relative;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: none;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+button:active {
+    transform: translateY(1px) scale(0.97);
+
+    box-shadow: none;
+}
+
+
+/* ========================================
+   BUTTON SHINE EFFECT
+======================================== */
+
+button::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    transition: left 0.5s ease;
+}
+
+button:hover::before {
+    left: 130%;
+}
+
+
+/* ========================================
+   HERO SEARCH BUTTON
+======================================== */
+
+main section button {
+    padding: 14px 25px;
+
+    margin: 5px;
+}
+
+
+/* ========================================
+   JOB SECTION
+======================================== */
+
+.jobs-section {
+    padding: 80px 30px;
+
+    background: #ffffff;
+}
+
+.jobs-section h2 {
+    text-align: center;
+
+    font-size: 36px;
+
+    margin-bottom: 45px;
+
+    color: #111827;
+
+    letter-spacing: -1px;
+}
+
+
+/* ========================================
+   JOB CONTAINER
+======================================== */
+
+.job-container {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: stretch;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+
+    max-width: 1200px;
+
+    margin: auto;
+}
+
+
+/* ========================================
+   JOB CARD
+======================================== */
+
+.job-card {
+    position: relative;
+
+    width: 300px;
+
+    padding: 27px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.06);
+
+    overflow: hidden;
+
+    cursor: none;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.job-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: #2563eb;
+
+    transform: scaleX(0);
+
+    transform-origin: left;
+
+    transition: transform 0.3s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-8px);
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 18px 35px rgba(15, 23, 42, 0.12);
+}
+
+.job-card:hover::before {
+    transform: scaleX(1);
+}
+
+.job-card h3 {
+    font-size: 20px;
+
+    color: #111827;
+
+    margin-bottom: 14px;
+
+    line-height: 1.3;
+}
+
+.job-card p {
+    color: #6b7280;
+
+    margin-bottom: 9px;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.job-card button {
+    margin-top: 15px;
+
+    padding: 10px 18px;
+}
+
+
+/* ========================================
+   SELECT
+======================================== */
+
+select {
+    width: 280px;
+
+    padding: 14px 16px;
+
+    margin: 5px;
+
+    font-size: 15px;
+
+    cursor: none;
+}
+
+
+/* ========================================
+   TEXTAREA
+======================================== */
+
+textarea {
+    width: 280px;
+
+    padding: 14px 16px;
+
+    margin: 5px;
+
+    font-size: 15px;
+
+    font-family: Arial, sans-serif;
+
+    resize: vertical;
+}
+
+
+/* ========================================
+   FORMS
+======================================== */
+
+form {
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    padding: 35px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.07);
+}
+
+form button {
+    margin-top: 12px;
+
+    padding: 14px 25px;
+}
+
+
+/* ========================================
+   JOB DETAILS
+======================================== */
+
+.job-details {
+    max-width: 850px;
+
+    margin: 60px auto;
+
+    padding: 45px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+}
+
+.job-details h2 {
+    font-size: 38px;
+
+    margin-bottom: 25px;
+
+    color: #111827;
+}
+
+.job-details h3 {
+    margin-top: 28px;
+
+    margin-bottom: 10px;
+
+    color: #111827;
+}
+
+.job-details p {
+    color: #6b7280;
+
+    line-height: 1.7;
+
+    margin-bottom: 10px;
+}
+
+.job-details button {
+    margin-top: 25px;
+
+    padding: 14px 28px;
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+footer {
+    text-align: center;
+
+    padding: 25px;
+
+    background: #111827;
+
+    color: white;
+}
+
+footer p {
+    font-size: 14px;
+
+    color: #d1d5db;
+}
+
+
+/* ========================================
+   CUSTOM SCROLLBAR
+======================================== */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+
+/* ========================================
+   FOCUS EFFECT
+======================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+
+    outline-offset: 2px;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+
+        gap: 15px;
+
+        padding: 18px 20px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 16px;
+    }
+
+    main > section:first-child {
+        padding: 85px 15px 80px;
+    }
+
+    main > section:first-child h2 {
+        font-size: 40px;
+    }
+
+    main section input,
+    select,
+    textarea {
+        width: 100%;
+
+        max-width: 380px;
+    }
+
+    main section button {
+        width: 100%;
+
+        max-width: 380px;
+    }
+
+    .jobs-section {
+        padding: 60px 15px;
+    }
+
+    .jobs-section h2 {
+        font-size: 30px;
+    }
+
+    .job-card {
+        width: 100%;
+
+        max-width: 380px;
+    }
+
+    form {
+        padding: 25px 18px;
+    }
+
+    .job-details {
+        margin: 30px 15px;
+
+        padding: 28px 22px;
+    }
+
+    .job-details h2 {
+        font-size: 30px;
+    }
+}
+
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+
+        animation: none !important;
+    }
+}
+
+
+/* ========================================
+   CUSTOM IMAGE CURSOR
+======================================== */
+
+.custom-image-cursor {
+    position: fixed;
+
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+    z-index: 100001;
+
+    transform: translate(-8px, -5px);
+
+    user-select: none;
+}
+
+
+/* ========================================
+   RGB DISCO GLOW
+======================================== */
+
+.cursor-glow {
+    position: fixed;
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 100000;
+
+    transform: translate(-50%, -50%);
+
+    background: conic-gradient(
+        #ff0080,
+        #ff8a00,
+        #ffe600,
+        #00ff88,
+        #00d9ff,
+        #7a2cff,
+        #ff0080
+    );
+
+    animation: discoRotate 2s linear infinite;
+
+    filter: blur(3px);
+
+    opacity: 0.85;
+
+    box-shadow:
+        0 0 12px rgba(255, 0, 128, 0.7),
+        0 0 25px rgba(0, 217, 255, 0.5),
+        0 0 40px rgba(122, 44, 255, 0.35);
+}
+
+
+/* ========================================
+   RGB ROTATION
+======================================== */
+
+@keyframes discoRotate {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+    }
+}
+
+
+/* ========================================
+   CURSOR MOBILE FALLBACK
+======================================== */
+
+@media (max-width: 768px) {
+
+    body,
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    .job-card {
+        cursor: auto;
+    }
+
+    .custom-image-cursor,
+    .cursor-glow {
+        display: none;
+    }
+}
